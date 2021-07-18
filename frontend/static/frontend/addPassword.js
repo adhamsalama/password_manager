@@ -7,7 +7,7 @@ addButton.onclick = () => {
     let password = document.querySelector("#password");
     let url = document.querySelector("#url");
     // verify master password
-    let MPW = prompt("Enter master password");
+    let MPW = getMasterPassword("Enter master password for encryption");
     if(MPW == null)
         return;
     let res = postData('http://127.0.0.1:8000/api/verify-master-password', data={master_password: MPW});

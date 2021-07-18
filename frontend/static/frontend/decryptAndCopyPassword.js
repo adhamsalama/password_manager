@@ -3,7 +3,7 @@ function decryptAndCopyPassword() {
     copyButtons.forEach(button => {
         button.onclick = () => {
         let encrypted_password = button.parentElement.querySelector(".encrypted-password").innerHTML.trim();
-        let MPW = prompt("Enter master password for decryption.");
+        let MPW = getMasterPassword("Enter master password for decryption.");
         let res = postData('http://127.0.0.1:8000/api/verify-master-password', data={master_password: MPW});
         res.then(response => response.json()).then(result => {
             if(result == false)
