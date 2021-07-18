@@ -25,6 +25,12 @@ class PasswordDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
+class VerifyMasterPassword(APIView):
+    def post(self, request):
+        print(request.data)
+        return Response(request.user.check_password(request.data['master_password']))
+
+
 class RegisterUser(APIView):
     def post(self, request):
         user = User.objects.create_user(username=request.data['username'], password=request.data['password'])
