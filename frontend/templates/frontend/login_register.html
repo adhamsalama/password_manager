@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Login</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body class="container">
+        <h1 class="w-75 mx-auto">Login</h1>
+        <form class="w-75 mx-auto mb-4" id="login-form">
+            <input class="form-control mb-2" type="text" name="username" id="login-username" placeholder="Username">
+            <input class="form-control mb-2" type="password" name="password" id="login-password" placeholder="Password">
+            <button class="btn btn-primary" id="login-button">Login</button>
+        </form>
+
+        <h1 class="w-75 mx-auto">Register</h1>
+        <form class="w-75 mx-auto" id="register-form">
+            <input class="form-control mb-2" type="text" name="username" id="register-username" placeholder="Username">
+            <input class="form-control mb-2" type="password" name="password" id="register-password" placeholder="Password">
+            <input class="form-control mb-2" type="password" name="password_" id="register-password_" placeholder="Re-enter password">
+            <button class="btn btn-primary" id="register-button">Register</button>
+        </form>
+
+        <script>
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            const csrftoken = getCookie('csrftoken');
+            document.querySelector("#login-form").onsubmit = () => false;
+            let loginButton = document.querySelector("#login-button");
+            loginButton.onclick = () => {
+                let username = document.querySelector("#login-username").value;
+                let password = document.querySelector("#login-password").value;
+                const request = new Request(
+                                "http://127.0.0.1:8000/api/login",
+                                {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
+                            );
+                fetch(request, {
+                    method: 'POST',
+                    mode: 'same-origin',  // Do not send CSRF token to another domain.
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })})
+                .then(response => {
+                    if (response.ok)
+                        window.location.replace('http://127.0.0.1:8000');
+                    else {
+                        alert("Invalid credentials.");
+                    }
+                })
+                }
+            document.querySelector("#register-form").onclick = () => false;
+            let registerButton = document.querySelector("#register-button");
+            registerButton.onclick = () => {
+                let username = document.querySelector("#register-username").value;
+                let password = document.querySelector("#register-password").value;
+                let password_ = document.querySelector("#register-password_").value;
+                if(password !== password_)
+                {
+                    alert("Passwords don't match");
+                    return;
+                }
+                const request = new Request(
+                                "http://127.0.0.1:8000/api/register",
+                                {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
+                            );
+                fetch(request, {
+                    method: 'POST',
+                    mode: 'same-origin',  // Do not send CSRF token to another domain.
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                    })})
+                .then(response => {
+                    if (response.ok){
+                        alert("Registered!")
+                        window.location.replace('http://127.0.0.1:8000');
+                    }
+                    else {
+                        alert("Registeration Error.");
+                    }
+                });
+            }
+        
+        
+        </script>
+    </body>
+</html>
