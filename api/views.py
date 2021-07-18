@@ -27,7 +27,6 @@ class PasswordDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class VerifyMasterPassword(APIView):
     def post(self, request):
-        print(request.data)
         return Response(request.user.check_password(request.data['master_password']))
 
 
