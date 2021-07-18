@@ -1,0 +1,189 @@
+<html>
+
+    <head>
+        <title>Notes</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body class="container">
+        <h1 class="mx-auto w-75" id="username-notes">Passwords</h1>
+        <div class="mx-auto w-75">
+            <button class="btn btn-primary" id="logout-button">Logout</button>
+        </div>
+        <form class="m-4 mx-auto w-75" method="post" action="http://127.0.0.1:8000/api/passwords">
+            <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="email" name="email" placeholder="Email">
+            <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="username" name="username" placeholder="Username">
+            <input class="form-control mb-2" autofocus style="width: 18rem;" type="password" id="password" name="password" placeholder="Password">
+            <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="url" name="url" placeholder="URL">
+
+            <button class="btn btn-primary" id="add-button">Add</button>
+
+        </form>
+        <div id="passwords" class="accordion w-75 mx-auto">
+
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        function loadPasswords(){
+            fetch('http://127.0.0.1:8000/api/passwords')
+            .then(response => response.json())
+            .then(results => {
+                console.log(results);
+                let div = document.querySelector("#passwords");
+                let passwords = "";
+                for(let i = 0; i < results.length; i++)
+                    {
+                        let email = results[i].email;
+                        let username = results[i].username;
+                        let encrypted_password = results[i].encrypted_password;
+                        let url = results[i].url;
+                        passwords += `
+                                <div class="accordion-item" id="${results[i].id}">
+                                  <h2 class="accordion-header" id="heading-${results[i].id}">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${results[i].id}" aria-expanded="true" aria-controls="collapse-${results[i].id}">
+                                      ${results[i].url}
+                                    </button>
+                                  </h2>
+                                  <div id="collapse-${results[i].id}" class="accordion-collapse collapse" aria-labelledby="heading-${results[i].id}" data-bs-parent="#passwords">
+                                    <div class="accordion-body">
+                                        Email: ${results[i].email}
+                                        <br>
+                                        Username: ${results[i].username}
+                                        <br>
+                                        <span style="display: none" class="encryptedPassword">
+                                            ${results[i].encrypted_password}
+                                        </span>
+                                        Link: ${results[i].url}
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary edit-button" type="button">Edit</button>
+                                        <button class="btn btn-danger delete-button" type="button">Delete</button>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>`;
+                    
+                    
+                    }
+                if(passwords == "")
+                    passwords = "<h2 class='mx-auto w-75'>You don't have any passwords.</h2>";
+                div.innerHTML = passwords;
+            
+                // add onclick event for delete buttons
+                let deleteButtons = document.querySelectorAll(".delete-button");
+                for(let i = 0; i < deleteButtons.length; i++)
+                {
+                    deleteButtons[i].onclick = () => {
+                        let id = deleteButtons[i].parentElement.parentElement.parentElement.id;
+                        const request = new Request(
+                                `http://127.0.0.1:8000/api/passwords/${id}`,
+                                {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
+                            );
+                        fetch(request, {
+                            method: 'DELETE',
+                            mode: 'same-origin'  // Do not send CSRF token to another domain.
+                        }).then(() => loadPasswords())
+                    }
+                }
+                
+                /*// add onclick event for edit button
+                let editButtons = document.querySelectorAll(".edit-button");
+                for(let i = 0; i < editButtons.length; i++)
+                {   editButtons[i].onclick = () => {
+                        let btnGroup = editButtons[i].parentElement;
+                        let parent = btnGroup.parentElement;
+                        let content = parent.querySelector(".card-text");
+                        let convertedMD = converter.makeMarkdown(content.innerHTML);
+                        content.innerHTML = convertedMD;
+                        content.contentEditable = true;
+                        // change it to a save button
+                        editButtons[i].innerText = "Save";
+                        let saveButton = editButtons[i];
+                        saveButton.onclick = () => {
+                            console.log(content.innerHTML);
+                            const request = new Request(
+                                `http://127.0.0.1:8000/api/notes/${parent.id}`,
+                                {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
+                            );
+                            fetch(request, {
+                                method: 'PATCH',
+                                mode: 'same-origin',  // Do not send CSRF token to another domain.
+                                body: JSON.stringify({
+                                    content: content.innerText
+                                })
+                            }).then(response => {
+                                if(response.status == 400)
+                                    response.json().then(result => {alert(result.content)})
+                                else if(response.status == 200)
+                                    loadNotes();
+                                });
+                        }
+                    }
+                }*/
+            })};
+        loadPasswords();
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        
+        // adding passwords
+        document.querySelector("form").onsubmit = () => {return false};
+        let addButton = document.querySelector("#add-button");
+        addButton.onclick = () => {
+            let email = document.querySelector("#email");
+            let username = document.querySelector("#username");
+            let password = document.querySelector("#password");
+            let url = document.querySelector("#url");
+            console.log(email.value, username.value, password.value, url.value);
+            const request = new Request(
+                                "http://127.0.0.1:8000/api/passwords",
+                                {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
+                            );
+            fetch(request, {
+                method: 'POST',
+                mode: 'same-origin',  // Do not send CSRF token to another domain.
+                body: JSON.stringify({
+                    email: email.value,
+                    username: username.value,
+                    encrypted_password: password.value,
+                    url: url.value
+                })
+            }).then(response => {                 
+                if(response.ok) {
+                    // clear input tags value
+                    email.value = "";
+                    username.value = "";
+                    password.value = "";
+                    url.value = "";
+                    // reload passwords
+                    loadPasswords();
+                }
+                else
+                    response.json().then(result => {alert(JSON.stringify(result))})
+            })
+        }
+        let logoutButton = document.querySelector("#logout-button");
+        logoutButton.onclick = () => {
+            fetch('http://127.0.0.1:8000/api/logout')
+            .then(response => response.json())
+            .then(result => {
+                window.location.replace('http://127.0.0.1:8000');
+            })
+        }
+        
+        
+    </script>
+    </body>
+</html>
