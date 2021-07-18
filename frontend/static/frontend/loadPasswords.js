@@ -24,9 +24,11 @@ function loadPasswords(){
                                 <br>
                                 Username: ${results[i].username}
                                 <br>
-                                <span style="display: none" class="encryptedPassword">
+                                <button class="btn btn-primary copy-button">Copy Password</button>
+                                <span style="display: none" class="encrypted-password">
                                     ${results[i].encrypted_password}
                                 </span>
+                                <br>
                                 Link: ${results[i].url}
                             </div>
                             <div class="d-grid gap-2">
@@ -59,39 +61,5 @@ function loadPasswords(){
                 }).then(() => loadPasswords())
             }
         }
-        
-        /*// add onclick event for edit button
-        let editButtons = document.querySelectorAll(".edit-button");
-        for(let i = 0; i < editButtons.length; i++)
-        {   editButtons[i].onclick = () => {
-                let btnGroup = editButtons[i].parentElement;
-                let parent = btnGroup.parentElement;
-                let content = parent.querySelector(".card-text");
-                let convertedMD = converter.makeMarkdown(content.innerHTML);
-                content.innerHTML = convertedMD;
-                content.contentEditable = true;
-                // change it to a save button
-                editButtons[i].innerText = "Save";
-                let saveButton = editButtons[i];
-                saveButton.onclick = () => {
-                    console.log(content.innerHTML);
-                    const request = new Request(
-                        `http://127.0.0.1:8000/api/notes/${parent.id}`,
-                        {headers: {'X-CSRFToken': csrftoken, 'content-type': 'application/json'}}
-                    );
-                    fetch(request, {
-                        method: 'PATCH',
-                        mode: 'same-origin',  // Do not send CSRF token to another domain.
-                        body: JSON.stringify({
-                            content: content.innerText
-                        })
-                    }).then(response => {
-                        if(response.status == 400)
-                            response.json().then(result => {alert(result.content)})
-                        else if(response.status == 200)
-                            loadNotes();
-                        });
-                }
-            }
-        }*/
-    })};
+        decryptAndCopyPassword();
+})};
