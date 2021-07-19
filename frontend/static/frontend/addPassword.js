@@ -30,7 +30,7 @@ addButton.onclick = () => {
                     password.value = "";
                     url.value = "";
                     // reload passwords
-                    loadPasswords();
+                    getPasswords().then(results => displayPasswords(results));
                 }
                 else {
                     response.json().then(result => {
