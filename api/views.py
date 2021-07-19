@@ -6,12 +6,27 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
+from django.db.models import Q
+
 # Create your views here.
 
 class PasswordList(generics.ListCreateAPIView):
     queryset = Password.objects.all()
     serializer_class = PasswordSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def get(self, request):
+        q = request.query_params.get('q', None)
+        if q is None:
+            return super().get(request)
+        
+        passwords = Password.objects.filter(user=request.user)
+        passwords = passwords.filter(Q(url__contains=q)|
+                                     Q(email__contains=q)|
+                                     Q(username__contains=q))
+        serializer = PasswordSerializer(passwords, many=True)
+        return Response(serializer.data)
+
     def get_queryset(self):
         return Password.objects.filter(user=self.request.user).order_by('url')
     
