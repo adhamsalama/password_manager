@@ -5,12 +5,11 @@ function modalClose(msg, func, params) {
     let bsModal = new bootstrap.Modal(modal);
     bsModal.show();
     let masterPasswordInput = document.querySelector("#master-password-input");
-    //masterPasswordInput.focus();
+    masterPasswordInput.focus();
     document.querySelector("#encrypt-decrypt-button").onclick = () => {
         let mpw = masterPasswordInput.value;
         if(mpw == null || mpw == "")
             return;
-        console.log(mpw);
         verifyMasterPassword(mpw)
         .then(result => {
             if(result == false)
