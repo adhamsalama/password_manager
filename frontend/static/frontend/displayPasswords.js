@@ -55,5 +55,12 @@ function displayPasswords(passwords) {
             }).then(() => getPasswords(document.querySelector("#q").value).then(results => displayPasswords(results)))
         }
     }
-    decryptAndCopyPassword();
+    // add onclick event for copy buttons
+    let copyButtons = document.querySelectorAll('.copy-button');
+        copyButtons.forEach(button => {
+        button.onclick = () => {
+            let encrypted_password = button.parentElement.querySelector(".encrypted-password").innerHTML.trim();
+            modalClose("Enter master password to decrypt.", decryptAndCopyPassword, encrypted_password);
+        }
+    })
 }
