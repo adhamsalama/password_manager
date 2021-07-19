@@ -1,5 +1,5 @@
 // adding passwords
-document.querySelector("form").onsubmit = () => {return false};
+document.querySelector("#add-password-form").onsubmit = () => {return false};
 let addButton = document.querySelector("#add-button");
 addButton.onclick = () => {
     let email = document.querySelector("#email");
