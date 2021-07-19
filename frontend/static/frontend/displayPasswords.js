@@ -52,7 +52,7 @@ function displayPasswords(passwords) {
             fetch(request, {
                 method: 'DELETE',
                 mode: 'same-origin'  // Do not send CSRF token to another domain.
-            }).then(() => getPasswords().then(results => displayPasswords(results)))
+            }).then(() => getPasswords(document.querySelector("#q").value).then(results => displayPasswords(results)))
         }
     }
     decryptAndCopyPassword();
