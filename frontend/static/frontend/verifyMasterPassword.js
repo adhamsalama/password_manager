@@ -1,4 +1,4 @@
 async function verifyMasterPassword(MPW) {
-    return postData(`${document.location.href}api/verify-master-password`, data={master_password: MPW})
+    return postData('http://127.0.0.1:8000/api/verify-master-password', data={master_password: MPW})
     .then(response => response.json())
 }

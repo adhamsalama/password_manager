@@ -73,7 +73,7 @@ function editPasswordEvent() {
                         }
 
                         // update password
-                        patchData(`${document.location.href}api/passwords/` + id, data = data)
+                        patchData('http://127.0.0.1:8000/api/passwords/' + id, data = data)
                             .then(response => response.json())
                             .then(() => {
                                 // display passwords

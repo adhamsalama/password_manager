@@ -1,8 +1,8 @@
 let logoutButton = document.querySelector("#logout-button");
         logoutButton.onclick = () => {
-            fetch('${document.location.href}api/logout')
+            fetch('http://127.0.0.1:8000/api/logout')
             .then(response => response.json())
             .then(result => {
-                window.location.replace(`${document.location.href}`);
+                window.location.replace('http://127.0.0.1:8000');
             })
         }
