@@ -38,6 +38,20 @@
         </div>
 {% endblock body %}
 {% block script %}
+    <script src="{% static 'frontend/crypto.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/getPasswords.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/displayPasswords.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/getCookie.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/addPassword.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/logout.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/postData.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/patchData.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/decryptAndCopyPassword.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/getMasterPassword.js' %}" type="text/javascript"></script>
+    <script src="{% static 'frontend/searchPasswords.js' %}" type="text/javascript"></script>    
+    <script src="{% static 'frontend/verifyMasterPassword.js' %}" type="text/javascript"></script>    
+    <script src="{% static 'frontend/modalClose.js' %}" type="text/javascript"></script>    
+    <script src="{% static 'frontend/modalAddPassword.js' %}" type="text/javascript"></script>    
 
     <script> 
         getPasswords()
