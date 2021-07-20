@@ -7,9 +7,10 @@
         <h1 class="mx-auto w-75" id="username-notes">Passwords</h1>
         <form id="add-password-form" class="m-4 mx-auto w-75" method="post" action="http://127.0.0.1:8000/api/passwords">
             <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="email" name="email" placeholder="Email">
-            <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="username" name="username" placeholder="Username">
-            <input class="form-control mb-2" autofocus style="width: 18rem;" type="password" id="password" name="password" placeholder="Password">
-            <input class="form-control mb-2" autofocus style="width: 18rem;" type="text" id="url" name="url" placeholder="URL">
+            <input class="form-control mb-2" style="width: 18rem;" type="text" id="username" name="username" placeholder="Username">
+            <input class="form-control mb-2" style="width: 18rem;" type="password" id="password" name="password" placeholder="Password">
+            <input class="form-control mb-2" style="width: 18rem;" type="text" id="url" name="url" placeholder="URL">
+            <input class="form-control mb-2" style="width: 18rem;" type="text" id="tags" name="tags" placeholder="Tags">
             <button class="btn btn-primary" id="add-button">Add</button>
         </form>
         <form id="search-form">
@@ -48,7 +49,8 @@
         <input type="text" class="edit-username form-control mb-2">
         <input type="password" class="edit-password form-control mb-2" placeholder="Enter new password">
         <input type="password" class="edit-master-password form-control mb-2" placeholder="Enter master password">
-        <input type="text" class="edit-url form-control mb-2">
+        <input type="text" class="edit-url form-control mb-2" placeholder"URL">
+        <input type="text" class="edit-tags form-control mb-2" placeholder="Tags">
       </div>
       <div class="modal-footer">
         <button type="button" id="edit-modal-save" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>

@@ -5,7 +5,13 @@ function displayPasswords(passwords) {
     let content = "";
     for(let i = 0; i < passwords.length; i++)
         {
-            content += `
+            let passwordTags = passwords[i].tags;
+            tagsHTML = "";
+            if(passwordTags !== null) {
+                passwordTags = JSON.parse(passwordTags.tags);
+                passwordTags.forEach(tag => tagsHTML += `<span class="badge rounded-pill bg-primary m-1 password-tag">${tag}</span>`)
+            }
+                content += `
                     <div class="accordion-item" id="${passwords[i].id}">
                       <h2 class="accordion-header" id="heading-${passwords[i].id}">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${passwords[i].id}" aria-expanded="true" aria-controls="collapse-${passwords[i].id}">
@@ -25,6 +31,7 @@ function displayPasswords(passwords) {
                             <br>
                             Link: <a href="${passwords[i].url}">
                                     <span class="password-url">${passwords[i].url}</span></a>
+                            <div class="password-tags">${tagsHTML}</div>
                         </div>
                         <div class="d-grid gap-2">
                             <button class="btn btn-primary edit-button" type="button">Edit</button>
@@ -73,7 +80,14 @@ function displayPasswords(passwords) {
             let id = parentDiv.id;
             let email = parentDiv.querySelector(".password-email").innerHTML.trim();
             let username = parentDiv.querySelector(".password-username").innerHTML.trim();
-            let url = parentDiv.querySelector(".password-url").innerHTML.trim();            
+            let url = parentDiv.querySelector(".password-url").innerHTML.trim();
+            let tags = parentDiv.querySelectorAll('.password-tag');
+            let tagsList = [];
+            if(tags !== null) {
+                tags.forEach(tag => {
+                    tagsList.push(tag.innerHTML)
+                })
+            }  
             let modal = document.querySelector("#edit-modal");
             // get modal input tags
             let modalEmail = modal.querySelector(".edit-email");
@@ -81,17 +95,22 @@ function displayPasswords(passwords) {
             let modalPassword = modal.querySelector(".edit-password");
             let modalUrl = modal.querySelector(".edit-url");
             let modalMPW = modal.querySelector(".edit-master-password");
+            let modalTags = modal.querySelector(".edit-tags");
             // fill modal input tags with password details
             modalEmail.value = email;
             modalUsername.value = username;
             modalUrl.value = url;
+            modalTags.value = tagsList;
             let bsModal = new bootstrap.Modal(modal);
             bsModal.show();
             document.querySelector("#edit-modal-save").onclick = () => {
                 verifyMasterPassword(modalMPW.value)
                 .then(result => {
-                    if(result == false)
-                        return;
+                    if(result == false) {
+                        alert("Wrong master password.");
+                        return false;
+                    }
+                        
                     // encrypt new password
                     data = {
                             email: modalEmail.value,
@@ -101,15 +120,40 @@ function displayPasswords(passwords) {
                     // check if password was updated
                     if(modalPassword.value !== "")
                         data.encrypted_password = encrypt(modalPassword.value, modalMPW.value);
+                    // check if tags were updated
+                    let modalTagsList = modalTags.value.trim().split(",");
+                    // same length, check for elements
+                    let flag = true;
+                    if(tagsList.length == modalTagsList.length) {
+                        for(let i = 0; i < tagsList.length; i++) {
+                            if(tagsList[i] !== modalTagsList[i]) {
+                                flag = false;
+                                break
+                            }
+                        }
+                    }
+                    else
+                        flag = false;
+                    
+                    if(!flag) {
+                        // check if empty tags
+                        if(modalTagsList.length == 1 && modalTagsList[0] == "")
+                            data.tags = null;
+                        // add tags to data for patching
+                        else
+                            data.tags = {"tags": JSON.stringify(modalTagsList)}
+                    }
+
+                    console.log(tagsList);
                     // update password
                     patchData('http://127.0.0.1:8000/api/passwords/' + id, data=data)
                     .then(response => response.json())
-                    .then(result => {
+                    .then(() => {
                         // display passwords
                         getPasswords().then(results => displayPasswords(results))
-                        // clear modal
-                        modal.querySelectorAll("input").forEach(input => input.value = "")
-
+                        // clear master password from modal
+                        //modal.querySelectorAll("input").forEach(input => input.value = "")
+                        modalTags.value = "";
                     });
                 });
             }
