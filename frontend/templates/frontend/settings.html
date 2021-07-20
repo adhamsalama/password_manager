@@ -61,7 +61,6 @@
                             let plaintext = decrypt(password.encrypted_password, mpw)
                             let newEncryptedPassword = encrypt(plaintext, newMPW);
                             password.encrypted_password = newEncryptedPassword;
-                            console.log("decrypt", decrypt(newEncryptedPassword, newMPW));
                         })
                         // send encrypted passwords
                         patchData('http://127.0.0.1:8000/api/passwords', data={passwords: passwords})
