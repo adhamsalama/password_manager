@@ -15,7 +15,7 @@ function modalAddPassword(MPW){
     if(tagsList.length == 1 && tagsList[0] == "")
         tagsJSON = null;
     tagsJSON = {"tags": tagsList};
-    postData(`https://${document.location.hostname}/api/passwords`, data={
+    postData(`${document.location.href}api/passwords`, data={
                 email: email.value,
                 username: username.value,
                 encrypted_password: encrypt(password.value, MPW),
