@@ -12,3 +12,4 @@ class Password(models.Model):
     encrypted_password = models.CharField(max_length=256)
     url = models.URLField(max_length=256, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='passwords')
+    tags = models.JSONField(null=True)
