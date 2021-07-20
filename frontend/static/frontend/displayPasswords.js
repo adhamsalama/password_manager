@@ -14,16 +14,17 @@ function displayPasswords(passwords) {
                       </h2>
                       <div id="collapse-${passwords[i].id}" class="accordion-collapse collapse" aria-labelledby="heading-${passwords[i].id}" data-bs-parent="#passwords">
                         <div class="accordion-body">
-                            Email: ${passwords[i].email}
+                            Email: <span class="password-email">${passwords[i].email}</span>
                             <br>
-                            Username: ${passwords[i].username}
+                            Username: <span class="password-username">${passwords[i].username}</span>
                             <br>
                             <button class="btn btn-primary copy-button">Copy Password</button>
                             <span style="display: none" class="encrypted-password">
                                 ${passwords[i].encrypted_password}
                             </span>
                             <br>
-                            Link: <a href="${passwords[i].url}">${passwords[i].url}</a>
+                            Link: <a href="${passwords[i].url}">
+                                    <span class="password-url">${passwords[i].url}</span></a>
                         </div>
                         <div class="d-grid gap-2">
                             <button class="btn btn-primary edit-button" type="button">Edit</button>
@@ -61,6 +62,57 @@ function displayPasswords(passwords) {
         button.onclick = () => {
             let encrypted_password = button.parentElement.querySelector(".encrypted-password").innerHTML.trim();
             modalClose("Enter master password to decrypt.", decryptAndCopyPassword, encrypted_password);
+        }
+    })
+    // add onclick event for edit buttons
+    let editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(button => {
+        button.onclick = () => {
+            // get password details
+            let parentDiv = button.parentElement.parentElement.parentElement;
+            let id = parentDiv.id;
+            let email = parentDiv.querySelector(".password-email").innerHTML.trim();
+            let username = parentDiv.querySelector(".password-username").innerHTML.trim();
+            let url = parentDiv.querySelector(".password-url").innerHTML.trim();            
+            let modal = document.querySelector("#edit-modal");
+            // get modal input tags
+            let modalEmail = modal.querySelector(".edit-email");
+            let modalUsername = modal.querySelector(".edit-username");
+            let modalPassword = modal.querySelector(".edit-password");
+            let modalUrl = modal.querySelector(".edit-url");
+            let modalMPW = modal.querySelector(".edit-master-password");
+            // fill modal input tags with password details
+            modalEmail.value = email;
+            modalUsername.value = username;
+            modalUrl.value = url;
+            let bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+            document.querySelector("#edit-modal-save").onclick = () => {
+                verifyMasterPassword(modalMPW.value)
+                .then(result => {
+                    if(result == false)
+                        return;
+                    // encrypt new password
+                    data = {
+                            email: modalEmail.value,
+                            username: modalUsername.value,
+                            url: modalUrl.value
+                        }
+                    // check if password was updated
+                    if(modalPassword.value !== "")
+                        data.encrypted_password = encrypt(modalPassword.value, modalMPW.value);
+                    // update password
+                    patchData('http://127.0.0.1:8000/api/passwords/' + id, data=data)
+                    .then(response => response.json())
+                    .then(result => {
+                        // display passwords
+                        getPasswords().then(results => displayPasswords(results))
+                        // clear modal
+                        modal.querySelectorAll("input").forEach(input => input.value = "")
+
+                    });
+                });
+            }
         }
     })
 }

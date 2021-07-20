@@ -36,6 +36,27 @@
             </div>
           </div>
         </div>
+<div class="modal" id="edit-modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="edit-email form-control mb-2">
+        <input type="text" class="edit-username form-control mb-2">
+        <input type="password" class="edit-password form-control mb-2" placeholder="Enter new password">
+        <input type="password" class="edit-master-password form-control mb-2" placeholder="Enter master password">
+        <input type="text" class="edit-url form-control mb-2">
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="edit-modal-save" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock body %}
 {% block script %}
     <script src="{% static 'frontend/crypto.js' %}" type="text/javascript"></script>
