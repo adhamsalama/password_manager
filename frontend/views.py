@@ -17,4 +17,4 @@ def login_register(request):
 def settings(request):
     if request.user.is_authenticated == False:
         return redirect(request, 'frontend/index.html')
-    return render(request, 'frontend/settings.htm')
+    return render(request, 'frontend/settings.html')
