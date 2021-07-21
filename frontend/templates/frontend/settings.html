@@ -23,57 +23,47 @@
     <script src="{% static 'frontend/logout.js' %}" type="text/javascript"></script>
     <script>
         document.querySelector("#change-mpw-form").onsubmit = () => {
-            let newMPW = document.querySelector("#new-mpw").value;
-            let mpw = document.querySelector("#old-mpw").value;
-            let username = document.querySelector("#new-username").value;
-            verifyMasterPassword(mpw)
-            .then(result => {
-                if(result == false) {
-                    alert("Wrong master password.")
+            let masterPassword = document.querySelector("#old-mpw").value;
+            let newMasterPassword = document.querySelector("#new-mpw").value;
+            let newUsername = document.querySelector("#new-username").value; 
+            patchData('http://127.0.0.1:8000/api/update-user-data', data={
+                new_username: newUsername,
+                password: masterPassword,
+                new_password: newMasterPassword
+            })
+            .then(response  => {
+                // couldn't update user data
+                if(!response.ok) {
+                    response.json().then(result => alert(result.error))
                     return false;
                 }
-                let data = {};
-                if(username !== '')
-                    data.username = username;
-                if(newMPW !== '')
-                    data.password = newMPW;
-                console.log(newMPW);
-                // update user data
-                patchData('http://127.0.0.1:8000/api/update-user-data', data=data)
-                .then(response  => {
-                    // couldn't update user data
-                    if(!response.ok) {
-                        response.json().then(result => alert(JSON.stringify(result)))
-                        return false;
-                    }
-                    // could update user data with new username, but no new master password was given
-                    // so don't need to re-encrypt all passwords
-                    if(newMPW == "") {
-                        console.log("no new mpw");
-                        return false;
-                    }
-                    // update username and master password
-                    // re-encrypt all passwords and send the vault to the server
-                    getPasswords()
-                    .then(passwords => {
-                        console.log(passwords);
-                        passwords.forEach(password => {
-                            // reencrypt passwords
-                            let plaintext = decrypt(password.encrypted_password, mpw)
-                            let newEncryptedPassword = encrypt(plaintext, newMPW);
-                            password.encrypted_password = newEncryptedPassword;
-                        })
-                        // send encrypted passwords
-                        patchData('http://127.0.0.1:8000/api/passwords', data={passwords: passwords})
-                        .then(response => response.json())
-                        .then(result => {
-                            alert("User data updated successfully.");
-                        })
-
-                    });
-                })
-                
+                // could update user data with new username, but no new master password was given
+                // so don't need to re-encrypt all passwords
+                if(newMasterPassword == "") {
+                    alert("User data updated successfully.")
+                    return false;
+                }
+                // updated username and master password
+                // re-encrypt all passwords and send the vault to the server
+                getPasswords()
+                .then(passwords => {
+                    console.log(passwords);
+                    passwords.forEach(password => {
+                        // reencrypt passwords
+                        let plaintext = decrypt(password.encrypted_password, masterPassword)
+                        let newEncryptedPassword = encrypt(plaintext, newMasterPassword);
+                        password.encrypted_password = newEncryptedPassword;
+                    })
+                    // send encrypted passwords
+                    patchData('http://127.0.0.1:8000/api/passwords', data={passwords: passwords})
+                    .then(response => response.json())
+                    .then(result => {
+                        alert("User data updated and passwords re-encrypted successfully.");
+                    })
+                });
             })
+                
+            
             return false;
         }
     </script>
