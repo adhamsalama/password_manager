@@ -97,10 +97,14 @@ class VerifyMasterPassword(APIView):
 
 class RegisterUser(APIView):
     def post(self, request):
-        user = User.objects.create_user(username=request.data['username'], password=request.data['password'])
-        user.save()
-        login(request, user)
-        return Response({"Registered successfully."}, status=200)
+        try:
+            existing_user = User.objects.get(username=request.data['username'])
+            return Response({"error": "Username already taken."}, status=400)
+        except User.DoesNotExist:
+            user = User.objects.create_user(username=request.data['username'], password=request.data['password'])
+            user.save()
+            login(request, user)
+            return Response({"Registered successfully."}, status=200)
 
 
 class LoginUser(APIView):
