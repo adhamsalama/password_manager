@@ -54,31 +54,27 @@ class PasswordList(generics.ListCreateAPIView,
 class UpdateUserData(APIView):
     def patch(self, request):
         user = User.objects.get(username=request.user.username)
-        #print(request.data)
-        #username = request.data.get('username', None)
-        #if username is not None:
-        #    user.username = username
-        #password = request.data.get('password', None)
-        #if password is not None:
-        #    user.set_password(password)
-        #    print("set user password to", password)
-        #user.save()
-        #login(request, user)
-        #return Response({"detail": "Updated user data"}, status=200)
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            # turn validated data of type OrderedDict to a list
-            data = list(serializer.validated_data.items())
+        new_username = request.data.get('new_username', None)
+        password = request.data.get('password', None)
+        new_password = request.data.get('new_password', None)
+        if password is None:
+            return Response({"error": "Master password is required."}, status=400)
 
-            username = data[0][1]
-            password = data[1][1]
-            if password is not None:
-                serializer.save(password=make_password(password))
-            else:
-                serializer.save()
-            login(request, user)
-            return Response({"Master Password changed."}, status=200)
-        return Response({"errors from update user": serializer.errors}, status=400)
+        if not user.check_password(password):
+            return Response({"error": "Wrong master password."}, status=400)
+            
+        if new_username is not None and new_username != '':
+            try:
+                existing_user = User.objects.get(username=new_username)
+                return Response({"error": "Username already taken."}, status=400)
+            except User.DoesNotExist:
+                user.username = new_username
+
+        if new_password is not None and new_password != '':
+            user.set_password(new_password)
+
+        user.save()
+        return Response({"User credentials updated successfully."}, status=200)    
 
 
 class PasswordDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -86,7 +82,6 @@ class PasswordDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PasswordSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-#class StoreEncryptedPasswords(generics.UpdateAPIView):
     
 
 
