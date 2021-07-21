@@ -28,7 +28,7 @@ function displayPasswords(passwords) {
                                 ${passwords[i].encrypted_password}
                             </span>
                             <br>
-                            Link: <a href="${passwords[i].url}">
+                            Link: <a href="${passwords[i].url}" target="_blank" rel="noopener noreferrer">
                                     <span class="password-url">${passwords[i].url}</span></a>
                             <div class="password-tags">${tagsHTML}</div>
                         </div>
