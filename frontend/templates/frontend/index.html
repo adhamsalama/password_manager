@@ -6,7 +6,7 @@
 
         <div style="display: flex" class="w-75 mx-auto">
           <!--Add password form-->
-          <form id="add-password-form" class="m-2 w-75" method="post" action="http://127.0.0.1:8000/api/passwords">
+          <form id="add-password-form" style="margin-right: 10px" class="w-75" method="post" action="http://127.0.0.1:8000/api/passwords">
               <input class="form-control mb-2" autofocus  type="text" id="email" name="email" placeholder="Email">
               <input class="form-control mb-2"  type="text" id="username" name="username" placeholder="Username">
               <input class="form-control mb-2"  type="password" id="password" name="password" placeholder="Password">
@@ -17,7 +17,7 @@
               </div>
           </form>
           <!--Random Password Generator-->
-          <div class="card mx-auto text-center m-2 w-75">
+          <div class="card mx-auto text-center w-75">
             <h5 class="card-header">Random Password Generator</h5>
             <div class="card-body">
                 <input type="number" id="length" class="form-control mb-2" placeholder="Length">
@@ -25,7 +25,7 @@
                   <button class="btn btn-primary mb-2" id="generate-password">Generate</button>
                   <button class="btn btn-primary mb-2" id="copy-generated-password">Copy</button>
                 </div>
-                <div id="generated-password" class="m-2"></div>
+                <div id="generated-password" class="mt-4"></div>
             </div>
           </div>
         </div>
