@@ -26,7 +26,7 @@
             let masterPassword = document.querySelector("#old-mpw").value;
             let newMasterPassword = document.querySelector("#new-mpw").value;
             let newUsername = document.querySelector("#new-username").value; 
-            patchData('http://127.0.0.1:8000/api/update-user-data', data={
+            patchData(`${window.location.origin}/api/update-user-data`, data={
                 new_username: newUsername,
                 password: masterPassword,
                 new_password: newMasterPassword
@@ -55,7 +55,7 @@
                         password.encrypted_password = newEncryptedPassword;
                     })
                     // send encrypted passwords
-                    patchData('http://127.0.0.1:8000/api/passwords', data={passwords: passwords})
+                    patchData(`${window.location.origin}/api/passwords`, data={passwords: passwords})
                     .then(response => response.json())
                     .then(result => {
                         alert("User data updated and passwords re-encrypted successfully.");

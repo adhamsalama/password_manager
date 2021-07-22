@@ -7,7 +7,7 @@ function deletePasswordEvent() {
                 return;
             let parentDiv = deleteButtons[i].parentElement.parentElement.parentElement;
             const request = new Request(
-                `http://127.0.0.1:8000/api/passwords/${parentDiv.id}`,
+                `${window.location.origin}/api/passwords/${parentDiv.id}`,
                 { headers: { 'X-CSRFToken': getCookie('csrftoken'), 'content-type': 'application/json' } }
             );
             fetch(request, {

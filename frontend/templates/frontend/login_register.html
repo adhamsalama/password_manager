@@ -33,13 +33,13 @@
             loginButton.onclick = () => {
                 let username = document.querySelector("#login-username").value;
                 let password = document.querySelector("#login-password").value;
-                postData('http://127.0.0.1:8000/api/login', data={
+                postData(`${window.location.origin}/api/login`, data={
                     username: username,
                     password: password
                 })
                 .then(response => {
                         if (response.ok)
-                            window.location.replace('http://127.0.0.1:8000');
+                            window.location.replace(`${window.location.origin}`);
                         else {
                             alert("Invalid credentials.");
                         }
@@ -56,14 +56,14 @@
                     alert("Passwords don't match");
                     return;
                 }
-                postData('http://127.0.0.1:8000/api/register', data={
+                postData(`${window.location.origin}/api/register`, data={
                     username: username,
                     password: password
                 })
                 .then(response => {
                     if (response.ok){
                         alert("Registered!");
-                        window.location.replace('http://127.0.0.1:8000');
+                        window.location.replace(`${window.location.origin}`);
                     }
                     else 
                         response.json().then(result => alert(result.error));
