@@ -1,0 +1,20 @@
+/* Small devices */
+@media (min-width: 476px) { 
+    .container {
+        max-width: 100% !important;
+    }
+ }
+
+/* Medium devices */
+@media (min-width: 668px) {
+    .container {
+        max-width: 75% !important;
+    }
+}
+
+/* Large devices */
+@media (min-width: 1000px) { 
+    .container {
+        max-width: 50% !important;
+    }
+ }
