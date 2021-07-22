@@ -1,6 +1,7 @@
 # Vault Guard
 
 ![Vault Guard](frontend/static/frontend/logo.png)
+
 Vault Guard is a secure open-source cloud-based password manager.
 
 Passwords are encrypted and decrypted on the client-side using **AES** encryption algorithm.
