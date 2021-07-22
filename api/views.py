@@ -74,6 +74,7 @@ class UpdateUserData(APIView):
             user.set_password(new_password)
 
         user.save()
+        login(request, user)
         return Response({"User credentials updated successfully."}, status=200)    
 
 
