@@ -8,7 +8,9 @@ Passwords are encrypted and decrypted on the client-side using **AES** encryptio
 
 Passwords are encrypted using the master password as the key.
 
-To add a new password, or copy an stored password, the user must enter the master password for encryption/decryption.
+You can also generate random passwords using the random password generator.
+
+To add a new password, or copy a stored password, the user must enter the master password for encryption/decryption.
 
 Vault Guard can be self-hosted by cloning the repo and running the code in the main branch.
 
