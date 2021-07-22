@@ -4,9 +4,9 @@
 {% block title %}Passwords{% endblock title %}
 {% block body %}
 
-        <div style="display: flex" class="w-75 mx-auto">
+        <div class="row mx-auto">
           <!--Add password form-->
-          <form id="add-password-form" style="margin-right: 10px" class="w-75" method="post" action="http://127.0.0.1:8000/api/passwords">
+          <form id="add-password-form" class="col-12 col-sm-12 col-md-6" method="post" action="http://127.0.0.1:8000/api/passwords">
               <input class="form-control mb-2" autofocus  type="text" id="email" name="email" placeholder="Email">
               <input class="form-control mb-2"  type="text" id="username" name="username" placeholder="Username">
               <input class="form-control mb-2"  type="password" id="password" name="password" placeholder="Password">
@@ -17,7 +17,7 @@
               </div>
           </form>
           <!--Random Password Generator-->
-          <div class="card mx-auto text-center w-75">
+          <div class="card mx-auto text-center col-12 col-sm-12 col-md-6">
             <h5 class="card-header">Random Password Generator</h5>
             <div class="card-body">
                 <input type="number" id="length" class="form-control mb-2" placeholder="Length">
@@ -32,12 +32,12 @@
         
         
         <form id="search-form">
-            <div class="mb-3 w-75 mx-auto">
+            <div class="mb-3 mx-auto">
                 <label for="q" class="form-label">Search</label>
                 <input type="text" class="form-control" id="q">
             </div>
         </form>
-        <div id="passwords" class="accordion w-75 mx-auto"></div>
+        <div id="passwords" class="accordion mx-auto"></div>
         <div class="modal" id="modal" tabindex="-1">
           <div class="modal-dialog">
             <div class="modal-content">
