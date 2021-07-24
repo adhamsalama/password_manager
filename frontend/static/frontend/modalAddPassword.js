@@ -9,18 +9,16 @@ function modalAddPassword(MPW){
     let password = document.querySelector("#password");
     let url = document.querySelector("#url");
     let tags = document.querySelector("#tags");
-    let tagsList = JSON.stringify(tags.value.trim().split(","));
-    let tagsJSON;
-    // check if empty then set tags to null
-    if(tagsList.length == 1 && tagsList[0] == "")
-        tagsJSON = null;
-    tagsJSON = {"tags": tagsList};
+    let tagsList = tags.value.trim().split(",");
+    if(tagsList.length == 1 && tagsList[0] == "") // empty tags, make it null instead of [""]
+        tagsList = null;
+
     postData(`${window.location.origin}/api/passwords`, data={
                 email: email.value,
                 username: username.value,
                 encrypted_password: encrypt(password.value, MPW),
                 url: url.value,
-                tags: tagsJSON
+                tags: tagsList
             })
             .then(response => {                 
                 if(response.ok) {

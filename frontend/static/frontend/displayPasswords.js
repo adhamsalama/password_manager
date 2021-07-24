@@ -7,7 +7,6 @@ function displayPasswords(passwords) {
         let passwordTags = passwords[i].tags;
         tagsHTML = "";
         if (passwordTags !== null) {
-            passwordTags = JSON.parse(passwordTags.tags);
             passwordTags.forEach(tag => tagsHTML += `<span class="badge rounded-pill bg-primary m-1 password-tag">${tag}</span>`)
         }
         content += `
