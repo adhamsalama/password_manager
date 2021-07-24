@@ -64,12 +64,12 @@ function editPasswordEvent() {
                             flag = false;
 
                         if (!flag) {
-                            // check if empty tags
+                            // check if empty tags, make it null instead of [""]
                             if (modalTagsList.length == 1 && modalTagsList[0] == "")
                                 data.tags = null;
                             // add tags to data for patching
                             else
-                                data.tags = { "tags": JSON.stringify(modalTagsList) }
+                                data.tags = modalTagsList;
                         }
 
                         // update password
