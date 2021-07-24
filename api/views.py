@@ -24,9 +24,9 @@ class PasswordList(generics.ListCreateAPIView,
             return super().get(request)
     
         passwords = Password.objects.filter(user=request.user)
-        passwords = passwords.filter(Q(url__contains=q)
-                                     |Q(email__contains=q)
-                                     |Q(username__contains=q))
+        passwords = passwords.filter(Q(url__icontains=q)
+                                     |Q(email__icontains=q)
+                                     |Q(username__icontains=q))
                                      #|Q(tags__tags__contains =q)) JSON filtering is not supported in SQLite
                                      # Will try to make it work when I change the database backend to PostgreSQL
         serializer = PasswordSerializer(passwords, many=True)
