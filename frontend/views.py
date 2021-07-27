@@ -8,8 +8,8 @@ from rest_framework.reverse import reverse
 @api_view()
 def index(request):
     if request.user.is_authenticated == False:
-        return redirect(reverse('frontend:accounts'))
-    return render(request, 'frontend/index.html')
+        return redirect(reverse('frontend:landing'))
+    return render(request, 'frontend/vault.html')
 
 def login_register(request):
     return render(request, 'frontend/login_register.html')
@@ -18,3 +18,8 @@ def settings(request):
     if request.user.is_authenticated == False:
         return redirect(request, 'frontend/index.html')
     return render(request, 'frontend/settings.html')
+
+def landing(request):
+    if request.user.is_authenticated:
+        return redirect(reverse('frontend:vault'))
+    return render(request, 'frontend/landing.html')
