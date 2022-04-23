@@ -14,7 +14,7 @@ def index(request):
 
 def settings(request):
     if request.user.is_authenticated == False:
-        return redirect(request, 'frontend/index.html')
+        return redirect(reverse('frontend:vault'))
     return render(request, 'frontend/settings.html')
 
 def landing(request):
