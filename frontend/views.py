@@ -5,6 +5,7 @@ from rest_framework.reverse import reverse
 
 # Create your views here.
 
+
 @api_view()
 def index(request):
     if request.user.is_authenticated == False:
@@ -14,8 +15,9 @@ def index(request):
 
 def settings(request):
     if request.user.is_authenticated == False:
-        return redirect(reverse('frontend:vault'))
+        return redirect(reverse('frontend:landing'))
     return render(request, 'frontend/settings.html')
+
 
 def landing(request):
     if request.user.is_authenticated:
